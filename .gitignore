@@ -1,0 +1,56 @@
+# Salesforce CLI and org authentication/session data
+.sf/
+.sfdx/
+.localdevserver/
+*.org
+*.auth
+*.jwt
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+*.jks
+*.keystore
+*.token
+*.session
+authFile.json
+access-token.txt
+
+# Salesforce and general logs / temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+npm-debug.log*
+yarn-debug.log*
+
+# Build and package artifacts
+node_modules/
+coverage/
+dist/
+build/
+.nyc_output/
+*.zip
+*.tar
+*.gz
+
+# VS Code local state (keep shared recommendations and tasks)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment files may contain credentials
+.env
+.env.*
+!.env.example
