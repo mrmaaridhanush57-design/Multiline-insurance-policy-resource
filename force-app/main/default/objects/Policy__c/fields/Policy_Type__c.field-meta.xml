@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Policy Type</label>
+    <required>true</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <value><fullName>Auto</fullName><default>true</default><label>Auto</label></value>
+            <value><fullName>Property</fullName><default>false</default><label>Property</label></value>
+            <value><fullName>Life</fullName><default>false</default><label>Life</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

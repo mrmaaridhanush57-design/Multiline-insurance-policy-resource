@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Adjuster</label>
+    <description>PROPOSED permission set. Add users only after reviewing sharing and territory controls in the target org.</description>
+    <classAccesses><apexClass>ClaimsAdjusterController</apexClass><enabled>true</enabled></classAccesses>
+    <classAccesses><apexClass>ClaimDashboardRow</apexClass><enabled>true</enabled></classAccesses>
+    <fieldPermissions><editable>true</editable><field>Claim__c.Policy__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Claim__c.Customer__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Claim__c.Claim_Type__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Claim__c.Claim_Amount__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Claim__c.Severity__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Claim__c.Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Claim__c.Approval_Status__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Claim__c.State_Territory__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Claim__c.Claim_Date__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>true</editable><field>Claim__c.Description__c</field><readable>true</readable></fieldPermissions>
+    <fieldPermissions><editable>false</editable><field>Policy__c.Policy_Type__c</field><readable>true</readable></fieldPermissions>
+    <objectPermissions>
+        <allowCreate>true</allowCreate><allowDelete>false</allowDelete><allowEdit>true</allowEdit>
+        <allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Claim__c</object><viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit>
+        <allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Policy__c</object><viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+    <objectPermissions>
+        <allowCreate>false</allowCreate><allowDelete>false</allowDelete><allowEdit>false</allowEdit>
+        <allowRead>true</allowRead><modifyAllRecords>false</modifyAllRecords><object>Account</object><viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+</PermissionSet>

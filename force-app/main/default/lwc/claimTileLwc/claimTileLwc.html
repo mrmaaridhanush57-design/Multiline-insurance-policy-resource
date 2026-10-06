@@ -1,0 +1,22 @@
+<template>
+    <lightning-card title={claim.claimNumber} icon-name="standard:case">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            <p><strong>Customer:</strong> {claim.customerName}</p>
+            <p><strong>Policy:</strong> {claim.policyNumber} ({claim.policyType})</p>
+            <p><strong>Type / severity:</strong> {claim.claimType} / {claim.severity}</p>
+            <p><strong>Claim amount:</strong>
+                <lightning-formatted-number
+                    value={claim.claimAmount}
+                    format-style="currency"
+                    maximum-fraction-digits="2"
+                ></lightning-formatted-number>
+            </p>
+            <p><strong>Status:</strong> {claim.status}</p>
+            <p><strong>Approval:</strong> {claim.approvalStatus}</p>
+            <p><strong>Territory:</strong> {claim.stateTerritory}</p>
+            <template lwc:if={claim.description}>
+                <p class="description slds-m-top_x-small">{claim.description}</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

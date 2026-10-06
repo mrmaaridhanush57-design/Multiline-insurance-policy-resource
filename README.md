@@ -1,101 +1,144 @@
 # Multi-Line Insurance Policy and Claims Management System
 
-## Project overview
+A Salesforce DX project proposal for managing Auto, Property, and Life policies and their claims. This repository contains proposed Salesforce source and configuration for academic evaluation; it has not been retrieved from, deployed to, or verified in a live Salesforce org.
 
-This project is a Salesforce-based insurance management solution designed to manage multiple insurance lines:
+> **Submission status:** project design, representative source, and configuration are included. Live Salesforce deployment, org execution, approval routing, permissions, and measured Apex coverage remain **not verified**.
+
+## Overview
+
+The solution is intended to centralize customer, policy, and claim work across three insurance lines:
 
 - Auto Insurance
 - Property Insurance
 - Life Insurance
 
-The target system is intended to automate policy quotation, policy processing, claim initiation, claim routing, claim handling, claim approval, claims visibility, and claims adjuster operations.
+The legacy process can involve manual policy quotation, slow policy issuance, inconsistent processing, manual claim handling, delayed claim resolution, fragmented customer/policy/claim information, poor customer experience, and high operational cost.
 
-> **Repository initialization complete. Salesforce implementation metadata will be synchronized from the Salesforce org after the repository foundation is established.**
->
-> No Salesforce implementation metadata has been imported or verified in this repository. All capabilities described here are target requirements, not claims of existing functionality.
+The proposed Salesforce solution brings policy and claim data together, supports premium calculation, automates claim routing, provides a claims adjuster dashboard, and defines approval and security patterns. The project source is representative and must be validated and adapted in a Salesforce org before use.
 
-## Business problem
+## Objectives
 
-The legacy insurance process is affected by manual policy quotation, slow policy issuance, inconsistent policy processing, manual claim handling, long claim resolution times, high operational costs, fragmented customer/policy/claim information, and poor customer experience.
+- Centralize policy information.
+- Automate premium calculation.
+- Automate claim routing.
+- Improve claims processing.
+- Provide a claims adjuster dashboard.
+- Support approval workflows.
+- Enforce role-based access.
+- Improve maintainability and scalability.
 
-Salesforce is the intended platform for addressing these problems through centralized data, Flow automation, Apex business logic, Lightning Web Components (LWC), approval processes, Salesforce security, and reporting/dashboard capabilities. These are architectural intentions; their implementation must be verified from the Salesforce org.
+## Technology stack
 
-## Project objectives
+| Area | Technology |
+|---|---|
+| Platform | Salesforce |
+| Server-side logic | Apex, SOQL |
+| User interface | Lightning Web Components |
+| Automation | Salesforce Flow (target design) |
+| Data | Custom Objects, Record Types, Validation Rules |
+| Access control | Permission Sets, Sharing Rules (target configuration) |
+| Approvals | Salesforce Approval Processes (target configuration) |
+| Source control | Salesforce DX, Git, GitHub |
 
-1. Standardize insurance policy management.
-2. Support Auto, Property, and Life insurance.
-3. Automate policy quotation.
-4. Calculate premiums using Apex business logic.
-5. Automate claim routing.
-6. Provide a Claims Adjuster dashboard.
-7. Support claim approval workflows.
-8. Implement role-based access.
-9. Restrict claim visibility by state/territory where required.
-10. Provide automated and tested Salesforce functionality.
-11. Maintain the implementation using Salesforce DX and Git.
+## Architecture
 
-## Target architecture
-
-**TARGET ARCHITECTURE — conceptual only; no component is asserted to be implemented.** See [docs/architecture.md](docs/architecture.md).
+**Proposed architecture — design only; not live-verified.**
 
 ```mermaid
 flowchart TD
     Customer --> Policy
-    Policy --> Auto
-    Policy --> Property
-    Policy --> Life
-    Auto --> Claim
-    Property --> Claim
-    Life --> Claim
-    Claim --> Routing[Claim Routing Flow]
+    Policy --> Lines[Auto / Property / Life]
+    Lines --> Claim
+    Claim --> Routing[Claim Routing Flow - proposed]
     Routing --> Adjuster[Claims Adjuster]
-    Adjuster --> Dashboard[Claims Dashboard]
-    Dashboard --> Controller[Apex Controller]
+    Adjuster --> Dashboard[Claims Dashboard LWC]
+    Dashboard --> Controller[ClaimsAdjusterController]
     Controller --> Data[Salesforce Data]
-    Claim -. High-value claim .-> Senior[Senior Adjuster]
+
+    Claim --> Threshold{Claim Amount > $50,000?}
+    Threshold -->|Yes| Senior[Senior Adjuster]
     Senior --> Manager[Department Manager]
     Manager --> Decision[Final Decision]
+    Threshold -->|No| Standard[Standard claim handling]
 ```
 
-## Target Salesforce data model
+## Main features
 
-The intended conceptual custom objects are `Policy__c` and `Claim__c`. Expected information may include:
+- **Policy management:** proposed Policy object with Auto, Property, and Life record types and line-specific field sets.
+- **Policy validation:** proposed checks requiring VIN for Auto and positive square footage for Property.
+- **Premium calculation:** Apex example with explicit illustrative rates; not an approved insurance pricing model.
+- **Claim management:** proposed Claim object related to a customer Account and Policy, with severity, amount, territory, adjuster, and approval status.
+- **Claims dashboard:** LWC that retrieves up to 200 visible claims and supports client-side search and status/territory filters.
+- **Approval hand-off:** Apex examples for Salesforce approval submission and work-item decisions; an active approval process and its approvers must be configured separately.
+- **Access design:** example Agent, Adjuster, and Manager permission sets. Record visibility and territory sharing require org-specific configuration and verification.
 
-- **Policy:** Policy Number, Customer, Policy Type, Status, Premium, Coverage, Start Date, End Date.
-- **Claim:** Claim Number, Policy, Customer, Claim Type, Claim Amount, Severity, Status, Approval Status, Assigned Adjuster, State/Territory, Claim Date, Description.
+## Project structure
 
-These names and fields are requirements, **not confirmation that objects or fields exist**. Actual API names and relationships must be determined from the Salesforce org during metadata retrieval. See [docs/data-model.md](docs/data-model.md).
+```text
+force-app/main/default/
+├── applications/       # Salesforce application metadata (not yet configured)
+├── approvalProcesses/  # Approval process design documented; org routing not configured
+├── classes/            # Apex services and tests
+├── flows/              # Flow designs documented; no unvalidated Flow XML
+├── labels/             # Custom label metadata
+├── layouts/            # Page layout metadata
+├── flexipages/         # Lightning page metadata
+├── lwc/                # Claims dashboard and reusable claim tile
+├── objects/            # Proposed Policy__c and Claim__c definitions
+├── permissionsets/     # Proposed Agent, Adjuster, and Manager access examples
+├── sharingRules/       # Org-specific sharing design documented
+└── tabs/               # Salesforce tab metadata
+docs/                   # Design, requirements, test, demo, and deployment guides
+scripts/                # Local helper guidance; no org credentials or deployment automation
+sample-data/            # Sample-data guidance; no real customer data
+```
 
-## Target configuration and automation
+## Setup and local review
 
-- **Policy record types:** Auto, Property, Life.
-- **Intended field sets:** `Auto_Fields` (VIN, Model Year); `Property_Fields` (Square Footage).
-- **AutoQuotingFlow:** Customer → Auto policy information → VIN / Model Year / Coverage → premium calculation → policy creation/update → success message.
-- **PremiumCalculator:** reusable premium calculation based on policy information. The production calculation must come from the actual Salesforce implementation; no insurance formula is specified here.
-- **Claim record-triggered Flow:** evaluate Policy Type, Claim Severity, and Claim Amount to route claims appropriately.
+Prerequisites: Git, Salesforce CLI, and access to a disposable Salesforce org for deployment validation.
 
-These are target requirements. Do not create metadata based only on this documentation.
+```bash
+git clone https://github.com/mrmaaridhanush57-design/Multiline-insurance-policy-resource.git
+cd Multiline-insurance-policy-resource
+sf --version
+sf project deploy start --help
+```
 
-## Target Apex and LWC components
+Review the proposed field names, security, sample pricing logic, and approval assumptions before deploying. Follow [docs/deployment.md](docs/deployment.md) for the org workflow. Do not put credentials, auth files, or customer data in this repository.
 
-Expected Apex components include `PremiumCalculator` for reusable server-side premium logic and `ClaimsAdjusterController` to retrieve claims, related policy and customer information, and dashboard data for an LWC using suitable wrapper/data-transfer structures. Potential test classes are `PremiumCalculatorTest` and `ClaimsAdjusterControllerTest`. Approval-related Apex, if any, must be imported from actual org metadata.
+## Demo
 
-Expected LWCs are `claimsDashboardLwc` (claim metrics and list, search, filters, loading, error, and empty states) and reusable `claimTileLwc` (individual claim display). No placeholder components are included. See [docs/apex.md](docs/apex.md) and [docs/lwc.md](docs/lwc.md).
+The [viva/demo script](docs/demo-script.md) provides a presentation sequence. It describes intended behavior and requires a configured org to demonstrate actual runtime behavior.
 
-## Target approval and security requirements
+## Testing
 
-Claims with an amount **greater than $50,000** are intended to route to a Senior Adjuster, then a Department Manager, for final approval or rejection. This is a project requirement; actual Salesforce configuration must be verified against the org.
+Representative Apex tests are included. **Tests are included and should be executed in a Salesforce org before deployment.** No test run or coverage result is claimed here. See [the test plan](docs/testing.md).
 
-Intended roles are Agent (quotation/policy activities), Adjuster (claim handling), and Manager (approval/review). Expected Salesforce controls include Profiles, Permission Sets, object permissions, Field-Level Security, Sharing Rules, record-level security, and state/territory-based claim access. None is claimed to be implemented. See [docs/approval-process.md](docs/approval-process.md) and [docs/security.md](docs/security.md).
+## Implementation status
 
-## Testing target
+This repository represents a **proposed/project implementation** with source examples and configuration artifacts. Live Salesforce deployment status must be verified separately. Some metadata, including Flows and the approval process setup, remains design-only. See [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
-Apex tests should cover PremiumCalculator, ClaimsAdjusterController, and claim approval logic where applicable. **Target: 95%+ Apex code coverage.** Actual coverage must come from Salesforce test execution; no test results or coverage are asserted here. See [docs/testing.md](docs/testing.md).
+## Future enhancements
 
-## Salesforce DX and development
+- Configure and verify a multi-step approval process and routing criteria.
+- Replace illustrative premium rates with approved, versioned business rules.
+- Implement and test state/territory-aware record sharing.
+- Add pagination and dashboard metrics for larger claim volumes.
+- Add Flow implementations after target-org design review.
+- Add LWC Jest tests and a CI pipeline after selecting a supported Salesforce DX build environment.
+- Add reporting dashboards, audit history, and operational monitoring.
 
-The Salesforce DX package directory is `force-app`. It currently contains no Salesforce metadata. Retrieve actual metadata from the org before editing implementation details. Follow [CONTRIBUTING.md](CONTRIBUTING.md), [docs/deployment.md](docs/deployment.md), and the repository guidance in [AGENTS.md](AGENTS.md).
+## Documentation
 
-## Project status
-
-All implementation components are **Not Verified**. Track verification in [PROJECT_STATUS.md](PROJECT_STATUS.md).
+- [Business requirements](docs/business-requirements.md)
+- [Architecture](docs/architecture.md)
+- [Data model](docs/data-model.md)
+- [Automation](docs/automation.md)
+- [Apex](docs/apex.md)
+- [Lightning Web Components](docs/lwc.md)
+- [Approval process](docs/approval-process.md)
+- [Security](docs/security.md)
+- [Testing](docs/testing.md)
+- [Deployment](docs/deployment.md)
+- [Demo script](docs/demo-script.md)
+- [Contribution workflow](CONTRIBUTING.md)

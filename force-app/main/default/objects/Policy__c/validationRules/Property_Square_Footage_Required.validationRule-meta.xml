@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <active>true</active>
+    <description>Proposed validation for Property policies. Verify behavior in a Salesforce org before deployment.</description>
+    <errorConditionFormula>AND(ISPICKVAL(Policy_Type__c, &quot;Property&quot;), OR(ISBLANK(Square_Footage__c), Square_Footage__c &lt;= 0))</errorConditionFormula>
+    <errorMessage>Enter square footage greater than zero for a Property policy.</errorMessage>
+    <errorDisplayField>Square_Footage__c</errorDisplayField>
+</ValidationRule>

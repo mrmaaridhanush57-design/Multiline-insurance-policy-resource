@@ -1,30 +1,35 @@
 # Architecture
 
-## Target design
-
-**TARGET DESIGN — conceptual architecture only.** No Salesforce component is asserted to exist or be implemented. Actual architecture must be revised after org metadata is retrieved and reviewed.
+> **Proposed implementation:** this diagram describes source in this repository and target configuration. It is not a live-org deployment diagram.
 
 ```mermaid
 flowchart TD
-    Customer --> Policy
+    Customer --> Policy[Policy__c]
     Policy --> Auto
     Policy --> Property
     Policy --> Life
-    Auto --> Claim
+    Auto --> Claim[Claim__c]
     Property --> Claim
     Life --> Claim
-    Claim --> Routing[Claim Routing Flow]
-    Routing --> Adjuster[Claims Adjuster]
-    Adjuster --> Dashboard[Claims Dashboard]
-    Dashboard --> Controller[Apex Controller]
-    Controller --> Data[Salesforce Data]
-    Claim -. High-value claim .-> Senior[Senior Adjuster]
+    Claim --> Route[Claim routing - proposed Flow design]
+    Route --> Adjuster[Claims Adjuster]
+    Adjuster --> Dashboard[claimsDashboardLwc]
+    Dashboard --> Controller[ClaimsAdjusterController]
+    Controller --> Data[Salesforce records]
+    Claim --> Gate{Amount > $50,000?}
+    Gate -->|Yes| Senior[Senior Adjuster]
     Senior --> Manager[Department Manager]
-    Manager --> Decision[Final Approval / Rejection]
+    Manager --> Decision[Final approval or rejection]
 ```
 
-Intended journey: customer and policy information spans Auto, Property, and Life lines; claims are routed to adjusters and surfaced on a dashboard. A high-value claim may enter the senior-adjuster and department-manager approval path. Exact relationships, automation, and UI integration remain to be verified.
+## Components
 
-## Actual implementation
+- **Data:** proposed Policy__c and Claim__c metadata, with Account and User lookups.
+- **Server-side:** Apex premium sample, claims dashboard query/DTO, and approval request/decision helpers.
+- **User interface:** a dashboard LWC and reusable claim tile.
+- **Automation:** Auto quoting and claim routing are designed in documentation; Flow metadata is intentionally deferred for org-specific configuration and validation.
+- **Access:** proposed permission-set examples. Record sharing and state/territory isolation require a separate verified sharing design.
 
-**Not verified.** Import and inspect the Salesforce metadata before documenting deployed components, dependencies, or behavior.
+## Actual status
+
+Source files are included in this repository. No component has been compiled or deployed in a Salesforce org.

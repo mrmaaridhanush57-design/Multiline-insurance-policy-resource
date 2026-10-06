@@ -1,24 +1,36 @@
 # Approval Process
 
-## Target design
+> **Proposed workflow.** No Salesforce approval-process definition or org configuration is included or deployed.
 
-Claims with an amount **greater than $50,000** are intended to follow this path:
+## Target path
 
-```text
-Claim Amount > $50,000
-        |
-        v
-Senior Adjuster
-        |
-        v
-Department Manager
-        |
-        v
-Final Approval / Rejection
+For a claim amount **greater than $50,000**:
+
+```mermaid
+flowchart TD
+    Claim --> Gate{Claim Amount > $50,000?}
+    Gate -->|No| Regular[Standard claim handling]
+    Gate -->|Yes| Submit[Submit for approval]
+    Submit --> Senior[Senior Adjuster]
+    Senior -->|Approve| Manager[Department Manager]
+    Senior -->|Reject| Rejected[Final rejection]
+    Manager -->|Approve| Approved[Final approval]
+    Manager -->|Reject| Rejected
 ```
 
-This is a project requirement, not confirmation of an existing approval process. Verify actual Salesforce configuration, including entry criteria, approvers, and final actions, against the org.
+Exactly $50,000 does not meet the greater-than condition. The Apex sample enforces that boundary.
 
-## Actual implementation
+## Proposed statuses
 
-**Not verified.** No approval metadata is present in the scaffold.
+- Approval Status: Not Required, Pending Senior Adjuster, Pending Department Manager, Approved, Rejected.
+- Claim Status: New, In Review, Pending Approval, Approved, Rejected, Closed.
+
+The values are sample picklist values in proposed metadata. Configure process field updates so status values remain synchronized with actual approval actions.
+
+## Configuration needed in an org
+
+Create an active Approval Process on Claim__c with criteria for Claim_Amount__c > 50000; define the Senior Adjuster first approver, Department Manager second approver, rejection/final actions, and allowed submitters. Decide how approver identity is resolved (user, queue, hierarchy, or another approved assignment mechanism). The Apex submitter assumes a suitable active process exists.
+
+## Actual status
+
+The Apex submit/decision helpers are included as source. Approval steps, approver assignments, and end-to-end approval execution are **not deployed or live-verified**.

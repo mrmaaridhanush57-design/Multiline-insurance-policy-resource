@@ -1,0 +1,53 @@
+<template>
+    <lightning-card title="Claims Adjuster Dashboard" icon-name="standard:case">
+        <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+            <div class="filters slds-grid slds-wrap slds-gutters_small slds-m-bottom_medium">
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+                    <lightning-input
+                        type="search"
+                        label="Search claims"
+                        value={searchTerm}
+                        onchange={handleSearch}
+                    ></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+                    <lightning-combobox
+                        label="Status"
+                        value={statusFilter}
+                        options={statusOptions}
+                        onchange={handleStatus}
+                    ></lightning-combobox>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
+                    <lightning-input
+                        label="State or territory"
+                        value={stateFilter}
+                        onchange={handleState}
+                    ></lightning-input>
+                </div>
+            </div>
+
+            <template lwc:if={isLoading}>
+                <lightning-spinner alternative-text="Loading claims" size="medium"></lightning-spinner>
+            </template>
+            <template lwc:elseif={errorMessage}>
+                <div class="slds-text-color_error" role="alert">{errorMessage}</div>
+            </template>
+            <template lwc:elseif={hasClaims}>
+                <div class="slds-grid slds-wrap slds-gutters_small">
+                    <template for:each={visibleClaims} for:item="claim">
+                        <div key={claim.id} class="slds-col slds-size_1-of-1 slds-large-size_1-of-2 slds-m-bottom_small">
+                            <c-claim-tile-lwc claim={claim}></c-claim-tile-lwc>
+                        </div>
+                    </template>
+                </div>
+                <template lwc:if={hasNoMatches}>
+                    <p class="slds-text-color_weak slds-p-vertical_medium">No claims match these filters.</p>
+                </template>
+            </template>
+            <template lwc:else>
+                <p class="slds-text-color_weak slds-p-vertical_medium">No claims are available.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

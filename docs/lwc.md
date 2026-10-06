@@ -1,12 +1,17 @@
 # Lightning Web Components
 
-## Target design
+> **Source included; Salesforce compilation and runtime behavior not verified.**
 
-- **claimsDashboardLwc:** display claim metrics and claims; support search and filters; provide loading, error, and empty states.
-- **claimTileLwc:** reusable display for an individual claim.
+## claimsDashboardLwc
 
-These are target requirements only. No placeholder components are included; retrieve actual components from Salesforce later.
+Imports ClaimsAdjusterController.getClaims, displays a loading indicator, reports retrieval errors, and distinguishes no records from no filter matches. Client-side search covers claim number, customer, policy, policy type, and description. Status and state/territory filters are also applied client-side to the returned list.
 
-## Actual implementation
+The Apex endpoint caps results at 200 visible records. Larger datasets require pagination or server-side filters; client-side filtering does not increase access and cannot show records hidden by Salesforce security.
 
-**Not verified.** Document actual component names, Apex wiring, permissions, and user-facing behavior after metadata retrieval.
+## claimTileLwc
+
+Reusable child component that displays claim number, customer, policy, type, severity, amount, status, approval state, territory, and description.
+
+## Access
+
+The dashboard is exposed on app, home, and record pages. The Adjuster permission-set example grants Apex class access and proposed object/field permissions. Admins must also grant the necessary object, field, record, and component access in the actual org.
