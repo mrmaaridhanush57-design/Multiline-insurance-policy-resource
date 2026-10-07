@@ -16,6 +16,10 @@ The legacy process can involve manual policy quotation, slow policy issuance, in
 
 The proposed Salesforce solution brings policy and claim data together, supports premium calculation, automates claim routing, provides a claims adjuster dashboard, and defines approval and security patterns. The project source is representative and must be validated and adapted in a Salesforce org before use.
 
+## Demo Video
+
+[Watch the project demo video here](https://drive.google.com/file/d/1JrkN6I5Qcq7qoMbmeD7SIednmL5G5HEs/view?usp=sharing)
+
 ## Objectives
 
 - Centralize policy information.
@@ -107,6 +111,8 @@ sf project deploy start --help
 Review the proposed field names, security, sample pricing logic, and approval assumptions before deploying. Follow [docs/deployment.md](docs/deployment.md) for the org workflow. Do not put credentials, auth files, or customer data in this repository.
 
 ## Demo
+
+Watch the [project demo video](https://drive.google.com/file/d/1JrkN6I5Qcq7qoMbmeD7SIednmL5G5HEs/view?usp=sharing).
 
 The [viva/demo script](docs/demo-script.md) provides a presentation sequence. It describes intended behavior and requires a configured org to demonstrate actual runtime behavior.
 
